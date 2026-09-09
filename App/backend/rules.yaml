@@ -1,0 +1,162 @@
+version: 1
+metadata:
+  name: "Amlodipine Besylate API - GxP Regulatory Filing Compliance Rules"
+  standard_refs: ["ICH Q3A(R2)", "ICH Q3C(R8)", "ICH Q6A", "ICH Q11", "ICH M7", "21 CFR 211"]
+  description: >
+    Programmatic GxP audit rules evaluated against a populated regulatoryFiling.json
+    for commercial validation batches of Amlodipine Besylate API prior to filing sign-off.
+
+# Sections that MUST be present and non-empty for the dossier to be considered
+# structurally complete before any rule is evaluated.
+mandatory_sections:
+  - document_metadata
+  - drug_substance_profile
+  - ksm_and_raw_materials
+  - process_controls.critical_process_parameters
+  - impurity_profile.organic_impurities
+  - impurity_profile.residual_solvents
+  - nitrosamine_risk_assessment
+  - release_specifications
+  - commercial_batches
+  - qa_compliance.deviations
+  - qa_compliance.disposition_signoff
+
+# Severity weighting used to decide the final verdict.
+verdict_policy:
+  auto_reject_severities: ["CRITICAL"]
+  hold_review_severities: ["MAJOR"]
+  approved_verdict: "APPROVED_FOR_FILING"
+  rejected_verdict: "REJECTED_HOLD_SUBMISSION"
+
+# Batch-scoped rules: engine iterates every entry in commercial_batches
+# and evaluates `field` (dot path relative to the batch object) against the rule.
+batch_rules:
+  - id: RULE-CMC-001
+    description: "Finished API Assay (HPLC, CoA) must fall within 98.0% - 102.0% (STP-QC-401)"
+    category: "Release Specification"
+    field: coa_results.assay_pct
+    operator: between
+    min: 98.0
+    max: 102.0
+    severity: CRITICAL
+
+  - id: RULE-CMC-002
+    description: "Impurity A (CoA) must not exceed NMT 0.10% per finished API release specification"
+    category: "Impurity Control"
+    field: coa_results.impurity_a_pct
+    operator: max
+    max: 0.10
+    severity: MAJOR
+
+  - id: RULE-CMC-003
+    description: "Impurity F (CoA) must not exceed NMT 0.15% per batch comparative specification"
+    category: "Impurity Control"
+    field: coa_results.impurity_f_pct
+    operator: max
+    max: 0.15
+    severity: MAJOR
+
+  - id: RULE-CMC-004
+    description: "Residual Isopropanol (Class 3 solvent, ICH Q3C) must not exceed NMT 3000 ppm"
+    category: "Residual Solvent"
+    field: coa_results.residual_ipa_ppm
+    operator: max
+    max: 3000
+    severity: MAJOR
+
+  - id: RULE-CMC-005
+    description: "Water Content (KF) must not exceed NMT 0.5% w/w"
+    category: "Release Specification"
+    field: coa_results.water_content_pct
+    operator: max
+    max: 0.5
+    severity: MINOR
+
+  - id: RULE-CMC-006
+    description: "Overall commercial process yield must fall within validated range 75.0% - 78.0%"
+    category: "Process Validation"
+    field: process_validation_yields.overall_process_yield_pct
+    operator: between
+    min: 75.0
+    max: 78.0
+    severity: MAJOR
+
+  - id: RULE-CMC-007
+    description: "Step 2 (Deprotection) stage yield must fall within validated range 90.0% - 93.0%"
+    category: "Process Validation"
+    field: process_validation_yields.step2_deprotection_pct
+    operator: between
+    min: 90.0
+    max: 93.0
+    severity: MAJOR
+
+  - id: RULE-CPP-001
+    description: "Step 2 Deprotection reaction time (CPP) must not exceed Master Batch Record limit of 6.0 hours"
+    category: "Critical Process Parameter"
+    field: ebmr_process_data.step2_deprotection_time_hr
+    operator: max
+    max: 6.0
+    severity: MAJOR
+
+  - id: RULE-CPP-002
+    description: "Step 1 Reflux Temperature (eBMR) must fall within Master Limit range 70.0°C - 78.0°C"
+    category: "Critical Process Parameter"
+    field: ebmr_process_data.step1_reflux_temp_c
+    operator: between
+    min: 70.0
+    max: 78.0
+    severity: MINOR
+
+  - id: RULE-NITRO-001
+    description: "N-Nitroso-amlodipine (NDSRI) must not exceed the calculated Acceptable Intake limit of 150 ppm"
+    category: "Nitrosamine (ICH M7)"
+    field: nitrosamine_levels.n_nitroso_amlodipine_ppm
+    operator: max
+    max: 150
+    severity: CRITICAL
+
+  - id: RULE-NITRO-002
+    description: "N-Nitrosopiperidine (NPIP) must not exceed the target Acceptable Intake limit of 130 ppm"
+    category: "Nitrosamine (ICH M7)"
+    field: nitrosamine_levels.n_nitrosopiperidine_ppm
+    operator: max
+    max: 130
+    severity: CRITICAL
+
+  - id: RULE-INTEGRITY-001
+    description: >
+      Data integrity cross-check: Assay reported in the regulatory dossier (Module 3 batch
+      comparison table) must be consistent (within +/- 0.5%) with the independently audited
+      finished-product CoA result for the same batch.
+    category: "Data Integrity / Cross-Document Consistency"
+    type: cross_field_consistency
+    field_a: dossier_reported.assay_pct
+    field_b: coa_results.assay_pct
+    tolerance: 0.5
+    severity: MAJOR
+
+# Deviation / OOS / OOT log rules: engine scans qa_compliance.deviations for
+# records whose affected_batch matches the current batch.
+deviation_rules:
+  - id: RULE-QA-001
+    description: "No CRITICAL severity deviation/OOS record may remain OPEN or UNDER INVESTIGATION at time of filing"
+    category: "QA Deviation Management"
+    match_severity: ["CRITICAL"]
+    forbidden_status: ["OPEN", "UNDER INVESTIGATION"]
+    severity: CRITICAL
+
+  - id: RULE-QA-002
+    description: "No MAJOR severity deviation record may remain OPEN without an approved CAPA at time of filing"
+    category: "QA Deviation Management"
+    match_severity: ["MAJOR"]
+    forbidden_status: ["OPEN"]
+    severity: MAJOR
+
+# Disposition rules: engine scans qa_compliance.disposition_signoff entries
+# that reference the current batch id.
+disposition_rules:
+  - id: RULE-QA-003
+    description: "QA Compliance Lead / VP Quality Operations disposition must not record a REJECT or HOLD decision for the batch"
+    category: "QA Disposition"
+    forbidden_keywords: ["REJECT", "HOLD"]
+    severity: CRITICAL

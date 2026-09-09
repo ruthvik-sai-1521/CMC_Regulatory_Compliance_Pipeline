@@ -1,0 +1,164 @@
+{
+  "report_id": "AUDIT-REG-AML-2026-CTD-M3-20260909064204",
+  "generated_at": "2026-09-09T06:42:04.722131Z",
+  "data_completeness": {
+    "status": "PASS",
+    "mandatory_sections_checked": [
+      "document_metadata",
+      "drug_substance_profile",
+      "ksm_and_raw_materials",
+      "process_controls.critical_process_parameters",
+      "impurity_profile.organic_impurities",
+      "impurity_profile.residual_solvents",
+      "nitrosamine_risk_assessment",
+      "release_specifications",
+      "commercial_batches",
+      "qa_compliance.deviations",
+      "qa_compliance.disposition_signoff"
+    ],
+    "missing_sections": []
+  },
+  "rules_evaluated": 46,
+  "rule_violations": [
+    {
+      "rule_id": "RULE-CMC-001",
+      "category": "Release Specification",
+      "description": "Finished API Assay (HPLC, CoA) must fall within 98.0% - 102.0% (STP-QC-401)",
+      "affected_batch": "AML-2026-02",
+      "parameter": "coa_results.assay_pct",
+      "actual_value": 97.1,
+      "expected": "98.0 - 102.0",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "RULE-CMC-002",
+      "category": "Impurity Control",
+      "description": "Impurity A (CoA) must not exceed NMT 0.10% per finished API release specification",
+      "affected_batch": "AML-2026-02",
+      "parameter": "coa_results.impurity_a_pct",
+      "actual_value": 0.28,
+      "expected": "<= 0.1",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-CMC-006",
+      "category": "Process Validation",
+      "description": "Overall commercial process yield must fall within validated range 75.0% - 78.0%",
+      "affected_batch": "AML-2026-02",
+      "parameter": "process_validation_yields.overall_process_yield_pct",
+      "actual_value": 58.9,
+      "expected": "75.0 - 78.0",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-CMC-007",
+      "category": "Process Validation",
+      "description": "Step 2 (Deprotection) stage yield must fall within validated range 90.0% - 93.0%",
+      "affected_batch": "AML-2026-02",
+      "parameter": "process_validation_yields.step2_deprotection_pct",
+      "actual_value": 74.1,
+      "expected": "90.0 - 93.0",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-CPP-001",
+      "category": "Critical Process Parameter",
+      "description": "Step 2 Deprotection reaction time (CPP) must not exceed Master Batch Record limit of 6.0 hours",
+      "affected_batch": "AML-2026-02",
+      "parameter": "ebmr_process_data.step2_deprotection_time_hr",
+      "actual_value": 8.5,
+      "expected": "<= 6.0",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-INTEGRITY-001",
+      "category": "Data Integrity / Cross-Document Consistency",
+      "description": "Data integrity cross-check: Assay reported in the regulatory dossier (Module 3 batch comparison table) must be consistent (within +/- 0.5%) with the independently audited finished-product CoA result for the same batch.\n",
+      "affected_batch": "AML-2026-02",
+      "parameter": "dossier_reported.assay_pct vs coa_results.assay_pct",
+      "actual_value": "dossier=99.6 / QA CoA=97.1 (\u0394=2.5)",
+      "expected": "within \u00b10.5",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-QA-001",
+      "category": "QA Deviation Management",
+      "description": "No CRITICAL severity deviation/OOS record may remain OPEN or UNDER INVESTIGATION at time of filing",
+      "affected_batch": "AML-2026-02",
+      "parameter": "OOS-2026-004",
+      "actual_value": "Assay & Impurity A Deviation [UNDER INVESTIGATION]",
+      "expected": "no OPEN/UNDER INVESTIGATION record at CRITICAL severity",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "RULE-QA-001",
+      "category": "QA Deviation Management",
+      "description": "No CRITICAL severity deviation/OOS record may remain OPEN or UNDER INVESTIGATION at time of filing",
+      "affected_batch": "AML-2026-02",
+      "parameter": "VAL-2026-001",
+      "actual_value": "Stage Yield Variance [OPEN]",
+      "expected": "no OPEN/UNDER INVESTIGATION record at CRITICAL severity",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "RULE-QA-002",
+      "category": "QA Deviation Management",
+      "description": "No MAJOR severity deviation record may remain OPEN without an approved CAPA at time of filing",
+      "affected_batch": "AML-2026-02",
+      "parameter": "DEV-2026-011",
+      "actual_value": "Step 2 Extended Deprotection Time [OPEN]",
+      "expected": "no OPEN record at MAJOR severity",
+      "severity": "MAJOR"
+    },
+    {
+      "rule_id": "RULE-QA-003",
+      "category": "QA Disposition",
+      "description": "QA Compliance Lead / VP Quality Operations disposition must not record a REJECT or HOLD decision for the batch",
+      "affected_batch": "AML-2026-02",
+      "parameter": "QA Compliance Lead",
+      "actual_value": "REJECT Batch AML-2026-02",
+      "expected": "decision must not contain REJECT / HOLD",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "RULE-QA-003",
+      "category": "QA Disposition",
+      "description": "QA Compliance Lead / VP Quality Operations disposition must not record a REJECT or HOLD decision for the batch",
+      "affected_batch": "ALL BATCHES / FILING",
+      "parameter": "VP Quality Operations",
+      "actual_value": "HOLD Regulatory Filing",
+      "expected": "decision must not contain REJECT / HOLD",
+      "severity": "CRITICAL"
+    }
+  ],
+  "violations_by_severity": {
+    "CRITICAL": 5,
+    "MAJOR": 6,
+    "MINOR": 0
+  },
+  "batch_verdicts": {
+    "AML-2026-01": {
+      "verdict": "APPROVED_FOR_FILING",
+      "critical_count": 0,
+      "major_count": 0,
+      "minor_count": 0,
+      "total_violations": 0
+    },
+    "AML-2026-02": {
+      "verdict": "REJECTED_HOLD_SUBMISSION",
+      "critical_count": 4,
+      "major_count": 6,
+      "minor_count": 0,
+      "total_violations": 10
+    },
+    "AML-2026-03": {
+      "verdict": "APPROVED_FOR_FILING",
+      "critical_count": 0,
+      "major_count": 0,
+      "minor_count": 0,
+      "total_violations": 0
+    }
+  },
+  "final_dossier_verdict": "REJECTED_HOLD_SUBMISSION",
+  "verdict_reason": "5 CRITICAL severity rule violation(s) identified."
+}

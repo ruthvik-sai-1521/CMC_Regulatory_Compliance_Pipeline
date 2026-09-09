@@ -1,0 +1,697 @@
+{
+  "document_metadata": {
+    "document_id": "REG-AML-2026-CTD-M3",
+    "drug_substance": "Amlodipine Besylate (USP/Ph. Eur.)",
+    "dmf_number": "US DMF 028491 / CEP 2021-104",
+    "submitting_entity": "Pharmaceutics Global R&D; & Regulatory Operations",
+    "target_authorities": [
+      "US FDA (CDER)",
+      "EMA",
+      "PMDA"
+    ],
+    "submission_purpose": "Post-Approval Synthetic Route Change (Step 1)",
+    "ctd_module_scope": "3.2.S.1 through 3.2.S.7 Complete Package",
+    "effective_date": "September 2026",
+    "qa_protocol_id": "QA-AML-2026-COMP-01",
+    "manufacturing_site": "Unit-B, Block 3 (Rx-04)",
+    "plant_location": "Site 4, Unit-B (Commercial Manufacturing Facility)",
+    "target_markets": [
+      "US FDA (PAS)",
+      "EU (Type II)"
+    ]
+  },
+  "drug_substance_profile": {
+    "iupac_name": "3-ethyl 5-methyl (4RS)-4-(2-chlorophenyl)-2-{[2-(aminoethoxy)methyl]-6-methyl-1,4-dihyd ropyridine-3,5-dicarboxylate benzenesulfonate}",
+    "cas_number_besylate": "111470-99-6",
+    "cas_number_free_base": "88150-42-9",
+    "molecular_formula": "C20H25ClN2O5 \u00b7 C6H6O3S | 567.05 g/mol",
+    "molecular_weight": "567.05 g/mol",
+    "stereochemistry": "Chiral Center at C4; Marketed as Racemate (1:1 R/S mixture)",
+    "melting_point_range_c": "198.5\u00b0C to 201.0\u00b0C (Endothermic Peak Decomposition)",
+    "pka": "8.6 at 25\u00b0C (Amine Functionality)",
+    "log_p": "Log P = 3.0 (Octanol / Water System)",
+    "solubility_matrix": [
+      {
+        "media": "0.1 N Hydrochloric Acid (HCl)",
+        "ph": "1.2",
+        "solubility": "25.4 mg/mL",
+        "classification": "Freely Soluble"
+      },
+      {
+        "media": "Acetate Buffer",
+        "ph": "4.5",
+        "solubility": "11.2 mg/mL",
+        "classification": "Soluble"
+      },
+      {
+        "media": "Phosphate Buffer (PBS)",
+        "ph": "6.8",
+        "solubility": "1.85 mg/mL",
+        "classification": "Slightly Soluble"
+      },
+      {
+        "media": "Purified Water",
+        "ph": "6.5",
+        "solubility": "0.78 mg/mL",
+        "classification": "Very Slightly Soluble"
+      },
+      {
+        "media": "Methanol",
+        "ph": "N/A",
+        "solubility": "78.0 mg/mL",
+        "classification": "Freely Soluble"
+      },
+      {
+        "media": "Isopropanol (IPA)",
+        "ph": "N/A",
+        "solubility": "14.5 mg/mL",
+        "classification": "Sparingly Soluble"
+      },
+      {
+        "media": "Acetone",
+        "ph": "N/A",
+        "solubility": "8.2 mg/mL",
+        "classification": "Slightly Soluble"
+      }
+    ]
+  },
+  "ksm_and_raw_materials": [
+    {
+      "material_name": "Ethyl 4-(2-(1,3-dioxoisoindolin-2-yl)et hoxy)-3-oxobutanoate",
+      "cas_number": "88150-62-3",
+      "role": "Key Starting Material (KSM - Step 1)",
+      "acceptance_specification": "Purity >= 98.5% (HPLC) Single Impurity <= 0.3% Water Content <= 0.2%",
+      "purge_rationale": "Defines core scaffold; unreacted phthalimide reagents are purged during Step 2 aqueous extractions."
+    },
+    {
+      "material_name": "2-Chlorobenzaldehyde",
+      "cas_number": "89-98-5",
+      "role": "Raw Material (Step 1)",
+      "acceptance_specification": "Assay >= 99.0% (GC) 2-Chlorobenzoic acid <= 0.5%",
+      "purge_rationale": "Excess aldehyde is purged in isolation slurry; acid form forms soluble salts removed in filtration."
+    },
+    {
+      "material_name": "Methyl 3-aminocrotonate",
+      "cas_number": "14205-39-1",
+      "role": "Raw Material (Step 1)",
+      "acceptance_specification": "Assay >= 98.0% (GC) Moisture <= 0.3%",
+      "purge_rationale": "Self-condensates are water soluble and purged in Step 2 washings."
+    },
+    {
+      "material_name": "Aqueous Methylamine",
+      "cas_number": "74-89-5",
+      "role": "Reagent (Step 2)",
+      "acceptance_specification": "Concentration: 39.0 - 41.0% w/w",
+      "purge_rationale": "Drives phthalimide cleavage; excess amine is volatile and purged in vacuum drying."
+    },
+    {
+      "material_name": "Benzenesulfonic Acid",
+      "cas_number": "98-11-3",
+      "role": "Reagent (Step 3)",
+      "acceptance_specification": "Assay >= 98.0% Free H2SO4 <= 0.3%",
+      "purge_rationale": "Forms target salt; controlled stoichiometry prevents free base carryover."
+    },
+    {
+      "material_name": "Isopropanol (IPA)",
+      "cas_number": "67-63-0",
+      "role": "Process Solvent (Class 3)",
+      "acceptance_specification": "Purity >= 99.8% Non-volatile matter <= 0.001%",
+      "purge_rationale": "Primary reaction/crystallization media; regulated per ICH Q3C."
+    }
+  ],
+  "process_controls": {
+    "critical_process_parameters": [
+      {
+        "process_step": "Step 1: Condensation",
+        "parameter": "Reaction Temp (CPP)",
+        "target": "81.0\u00b0C",
+        "proven_acceptable_range": "78.0\u00b0C - 84.0\u00b0C",
+        "cqa_impact": "Temperature > 85\u00b0C increases oxidative pyridine impurity A."
+      },
+      {
+        "process_step": "Step 1: Condensation",
+        "parameter": "Agitation Speed (Non-CPP)",
+        "target": "85 rpm",
+        "proven_acceptable_range": "70 - 100 rpm",
+        "cqa_impact": "Ensures thermal mass uniformity; minimal effect on profile."
+      },
+      {
+        "process_step": "Step 2: Deprotection",
+        "parameter": "Methylamine Addition Rate (CPP)",
+        "target": "2.0 L/min",
+        "proven_acceptable_range": "1.5 - 2.5 L/min",
+        "cqa_impact": "Exotherm control; prevents degradation of dimer impurity."
+      },
+      {
+        "process_step": "Step 2: Deprotection",
+        "parameter": "Reaction Time (CPP)",
+        "target": "6.0 Hours",
+        "proven_acceptable_range": "5.0 - 8.0 Hours",
+        "cqa_impact": "Time < 5 hrs leaves incomplete deprotection (>0.2% Int I)."
+      },
+      {
+        "process_step": "Step 3: Salt Formation",
+        "parameter": "Acid Addition Duration (CPP)",
+        "target": "90 Minutes",
+        "proven_acceptable_range": "75 - 120 Minutes",
+        "cqa_impact": "Rapid addition causes amorphous salt precipitation."
+      },
+      {
+        "process_step": "Step 3: Crystallization",
+        "parameter": "Cooling Rate (CPP)",
+        "target": "0.5\u00b0C / min",
+        "proven_acceptable_range": "0.3\u00b0C - 0.7\u00b0C / min",
+        "cqa_impact": "Controls particle size distribution (D90) and polymorphic Form I."
+      },
+      {
+        "process_step": "Step 3: Vacuum Drying",
+        "parameter": "Drying Temp / Pressure (CPP)",
+        "target": "45\u00b0C / >=650 mmHg",
+        "proven_acceptable_range": "40\u00b0C - 50\u00b0C",
+        "cqa_impact": "Excess heat causes degradation; controls residual IPA < 3000 ppm."
+      }
+    ],
+    "hold_time_limits": [
+      {
+        "intermediate_stage": "Step 1 Wet Cake (Int I)",
+        "storage_condition": "Ambient (20-25\u00b0C), Sealed Drum",
+        "max_hold_time": "7 Days",
+        "retest_parameter": "Related Substances & Purity (HPLC)"
+      },
+      {
+        "intermediate_stage": "Step 2 Free Base Solution",
+        "storage_condition": "Stainless Tank at 15-20\u00b0C",
+        "max_hold_time": "48 Hours",
+        "retest_parameter": "Assay & Color Variation Index"
+      },
+      {
+        "intermediate_stage": "Step 3 Crude Wet Besylate",
+        "storage_condition": "Chilled Stainless Vessel (5-10\u00b0C)",
+        "max_hold_time": "72 Hours",
+        "retest_parameter": "Polymorphic Form Integrity (PXRD)"
+      },
+      {
+        "intermediate_stage": "Final Micronized API",
+        "storage_condition": "Double PE Bag in HDPE Drum",
+        "max_hold_time": "36 Months",
+        "retest_parameter": "Full Release Specification Retest"
+      }
+    ]
+  },
+  "impurity_profile": {
+    "organic_impurities": [
+      {
+        "impurity_name": "Impurity A: Oxidative Pyridine analogue",
+        "cas_number": "113994-41-5",
+        "origin": "Process / Degradant (Oxidation)",
+        "ich_q3a_limit": "0.15%",
+        "proposed_spec": "NMT 0.10%",
+        "batch_range_observed": "< 0.02% - 0.04%"
+      },
+      {
+        "impurity_name": "Impurity B: Methyl ester analogue",
+        "cas_number": "103863-88-9",
+        "origin": "Raw Material Transesterification",
+        "ich_q3a_limit": "0.15%",
+        "proposed_spec": "NMT 0.10%",
+        "batch_range_observed": "< 0.01% - 0.03%"
+      },
+      {
+        "impurity_name": "Impurity D: Phthalimide intermediate",
+        "cas_number": "88150-62-3",
+        "origin": "Step 2 Incomplete Reaction",
+        "ich_q3a_limit": "0.15%",
+        "proposed_spec": "NMT 0.10%",
+        "batch_range_observed": "ND (< 0.01%)"
+      },
+      {
+        "impurity_name": "Impurity F: Methyl ethyl ester analogue",
+        "cas_number": "140171-66-0",
+        "origin": "Side Condensation Step 1",
+        "ich_q3a_limit": "0.15%",
+        "proposed_spec": "NMT 0.15%",
+        "batch_range_observed": "0.03% - 0.06%"
+      },
+      {
+        "impurity_name": "Any Unspecified Impurity",
+        "cas_number": null,
+        "origin": "Unknown / Synthetic",
+        "ich_q3a_limit": "0.10%",
+        "proposed_spec": "NMT 0.05%",
+        "batch_range_observed": "< 0.03%"
+      },
+      {
+        "impurity_name": "Total Impurities",
+        "cas_number": null,
+        "origin": "Cumulative Profile",
+        "ich_q3a_limit": "N/A",
+        "proposed_spec": "NMT 0.50%",
+        "batch_range_observed": "0.08% - 0.14%"
+      }
+    ],
+    "residual_solvents": [
+      {
+        "solvent_name": "Isopropanol (IPA)",
+        "ich_class": "Class 3",
+        "ich_q3c_limit": "5000 ppm",
+        "proposed_qc_spec": "NMT 3000 ppm",
+        "observed_level": "450 - 820 ppm"
+      },
+      {
+        "solvent_name": "Methyl Isobutyl Ketone (MIBK)",
+        "ich_class": "Class 2",
+        "ich_q3c_limit": "450 ppm",
+        "proposed_qc_spec": "NMT 250 ppm",
+        "observed_level": "12 - 35 ppm"
+      },
+      {
+        "solvent_name": "Methanol",
+        "ich_class": "Class 2",
+        "ich_q3c_limit": "3000 ppm",
+        "proposed_qc_spec": "NMT 500 ppm",
+        "observed_level": "ND (< 10 ppm)"
+      }
+    ]
+  },
+  "nitrosamine_risk_assessment": {
+    "risk_factors": [
+      {
+        "factor": "Secondary / Tertiary Amines",
+        "finding": "Amlodipine contains a primary aliphatic amine; secondary amine impurities are monitored below 0.05%.",
+        "conclusion": "LOW RISK: No precursors present."
+      },
+      {
+        "factor": "Nitrosating Agents",
+        "finding": "Sodium Nitrite or Nitrates are NOT utilized in any step of the synthetic process.",
+        "conclusion": "NO RISK: Absence of nitrites."
+      },
+      {
+        "factor": "Solvent Recycling & Equipment",
+        "finding": "Freshly distilled solvents are used; zero cross-contamination risk from external recovered lines.",
+        "conclusion": "NO RISK: Dedicated equipment."
+      },
+      {
+        "factor": "NDSRI Risk Assessment",
+        "finding": "N-Nitroso-Amlodipine potential studied. Ames test confirms negative mutagenicity.",
+        "conclusion": "Calculated AI: 1500 ng/day."
+      },
+      {
+        "factor": "Confirmatory LC-MS/MS Testing",
+        "finding": "Testing of 3 commercial scale lots for 8 major nitrosamines (NDMA, NDEA, NDIPA, NDBA, etc.).",
+        "conclusion": "ALL ND (< 0.03 ppm / LOQ)."
+      }
+    ],
+    "calculated_ai_ng_per_day": 1500.0,
+    "confirmatory_testing_result": "ALL ND (< 0.03 ppm / LOQ)."
+  },
+  "elemental_impurities": [
+    {
+      "element_class": "Class 1",
+      "target_elements": "Cd, Pb, As, Hg",
+      "ich_q3d_pde": "15, 5, 15, 30 \u00b5g/day",
+      "observed_level": "< 10% of PDE (Conforms)"
+    },
+    {
+      "element_class": "Class 2A",
+      "target_elements": "V, Ni, Co",
+      "ich_q3d_pde": "100, 200, 50 \u00b5g/day",
+      "observed_level": "< 10% of PDE (Conforms)"
+    },
+    {
+      "element_class": "Class 3",
+      "target_elements": "Cu, Cr, Mo",
+      "ich_q3d_pde": "3000, 11000, 3000 \u00b5g/day",
+      "observed_level": "< 5% of PDE (Conforms)"
+    }
+  ],
+  "release_specifications": [
+    {
+      "test_parameter": "Appearance",
+      "test_method_id": "Visual (STP-QC-101)",
+      "acceptance_specification": "White or almost white crystalline powder"
+    },
+    {
+      "test_parameter": "Identification (FT-IR)",
+      "test_method_id": "STP-QC-102",
+      "acceptance_specification": "Conforms to USP Reference Standard"
+    },
+    {
+      "test_parameter": "Identification (Besylate Salt)",
+      "test_method_id": "STP-QC-103",
+      "acceptance_specification": "Positive test for Benzenesulfonate"
+    },
+    {
+      "test_parameter": "Assay (HPLC)",
+      "test_method_id": "STP-QC-401",
+      "acceptance_specification": "98.0% - 102.0% (Dried Basis)"
+    },
+    {
+      "test_parameter": "Organic Impurities",
+      "test_method_id": "STP-QC-402",
+      "acceptance_specification": "Imp A <= 0.10%, Imp B <= 0.10%, Total <= 0.50%"
+    },
+    {
+      "test_parameter": "Residual Isopropanol",
+      "test_method_id": "STP-GC-105",
+      "acceptance_specification": "NMT 3000 ppm"
+    },
+    {
+      "test_parameter": "Water Content (KF)",
+      "test_method_id": "STP-QC-205",
+      "acceptance_specification": "NMT 0.5% w/w"
+    },
+    {
+      "test_parameter": "Residue on Ignition",
+      "test_method_id": "STP-QC-208",
+      "acceptance_specification": "NMT 0.1% w/w"
+    },
+    {
+      "test_parameter": "Particle Size Distribution",
+      "test_method_id": "STP-QC-305 (Laser)",
+      "acceptance_specification": "D10: 5-15 \u00b5m, D50: 25-40 \u00b5m, D90 <= 80 \u00b5m"
+    },
+    {
+      "test_parameter": "Bacterial Endotoxins",
+      "test_method_id": "STP-QC-501 (LAL)",
+      "acceptance_specification": "NMT 0.35 EU/mg (Parenteral Grade)"
+    }
+  ],
+  "analytical_method_validation": [
+    {
+      "validation_parameter": "Specificity / Selectivity",
+      "acceptance_criteria": "No interference at Amlodipine peak",
+      "assay_result": "No co-eluting peaks",
+      "related_substances_result": "Peak Purity Angle < Threshold"
+    },
+    {
+      "validation_parameter": "Linearity Range",
+      "acceptance_criteria": "R\u00b2 >= 0.999",
+      "assay_result": "R\u00b2 = 0.9998 (50-150% Target)",
+      "related_substances_result": "R\u00b2 = 0.9995 (0.05-1.5% Range)"
+    },
+    {
+      "validation_parameter": "Accuracy (% Recovery)",
+      "acceptance_criteria": "98.0% - 102.0% (Assay) / 85-115% (Imp)",
+      "assay_result": "99.4% - 100.8%",
+      "related_substances_result": "94.2% - 103.5%"
+    },
+    {
+      "validation_parameter": "Repeatability (%RSD)",
+      "acceptance_criteria": "%RSD <= 1.0% (Assay) / <= 5.0% (Imp)",
+      "assay_result": "0.35% (n=6)",
+      "related_substances_result": "1.8% (n=6)"
+    },
+    {
+      "validation_parameter": "Intermediate Precision",
+      "acceptance_criteria": "%RSD <= 1.5% across 2 analysts/days",
+      "assay_result": "0.52% overall",
+      "related_substances_result": "2.4% overall"
+    },
+    {
+      "validation_parameter": "LOD & LOQ Thresholds",
+      "acceptance_criteria": "LOQ <= 0.05% for impurities",
+      "assay_result": "N/A",
+      "related_substances_result": "LOD: 0.01%, LOQ: 0.03%"
+    },
+    {
+      "validation_parameter": "Solution Stability",
+      "acceptance_criteria": "Stable for >= 48 hours at 2-8\u00b0C",
+      "assay_result": "Stable 72 Hours",
+      "related_substances_result": "Stable 48 Hours"
+    }
+  ],
+  "stability_data": {
+    "forced_degradation": [
+      {
+        "stress_condition": "Acid Hydrolysis",
+        "exposure_parameters": "1 N HCl, 60\u00b0C, 6 Hours",
+        "assay_pct": 91.2,
+        "total_degradants_pct": 8.2,
+        "primary_degradation_product": "Impurity D (Phthalimide Base)"
+      },
+      {
+        "stress_condition": "Base Hydrolysis",
+        "exposure_parameters": "1 N NaOH, 60\u00b0C, 6 Hours",
+        "assay_pct": 94.5,
+        "total_degradants_pct": 5.1,
+        "primary_degradation_product": "Ester Hydrolysis Cleavage"
+      },
+      {
+        "stress_condition": "Oxidative Stress",
+        "exposure_parameters": "3% H2O2, Room Temp, 2 Hours",
+        "assay_pct": 88.4,
+        "total_degradants_pct": 11.2,
+        "primary_degradation_product": "Impurity A (Oxidative Pyridine)"
+      },
+      {
+        "stress_condition": "Thermal Stress",
+        "exposure_parameters": "105\u00b0C, Dry Heat, 48 Hours",
+        "assay_pct": 98.1,
+        "total_degradants_pct": 1.6,
+        "primary_degradation_product": "Minor Unspecified Degradants"
+      },
+      {
+        "stress_condition": "Photolytic Stress",
+        "exposure_parameters": "1.2 Million Lux Hours (ICH Q1B)",
+        "assay_pct": 92.0,
+        "total_degradants_pct": 7.5,
+        "primary_degradation_product": "Photo-cyclized Pyridine Derivative"
+      }
+    ],
+    "long_term_stability": [
+      {
+        "test_parameter": "Appearance",
+        "initial_t0": "White Powder",
+        "month_6": "Conforms",
+        "month_12": "Conforms",
+        "month_18": "Conforms",
+        "month_24": "Conforms",
+        "specification": "White Crystalline Powder"
+      },
+      {
+        "test_parameter": "Assay (%)",
+        "initial_t0": "99.8%",
+        "month_6": "99.7%",
+        "month_12": "99.5%",
+        "month_18": "99.4%",
+        "month_24": "99.2%",
+        "specification": "98.0% - 102.0%"
+      },
+      {
+        "test_parameter": "Impurity A (%)",
+        "initial_t0": "0.02%",
+        "month_6": "0.03%",
+        "month_12": "0.03%",
+        "month_18": "0.04%",
+        "month_24": "0.04%",
+        "specification": "NMT 0.10%"
+      },
+      {
+        "test_parameter": "Total Impurities",
+        "initial_t0": "0.08%",
+        "month_6": "0.10%",
+        "month_12": "0.11%",
+        "month_18": "0.13%",
+        "month_24": "0.14%",
+        "specification": "NMT 0.50%"
+      },
+      {
+        "test_parameter": "Water Content (%)",
+        "initial_t0": "0.21%",
+        "month_6": "0.22%",
+        "month_12": "0.24%",
+        "month_18": "0.25%",
+        "month_24": "0.26%",
+        "specification": "NMT 0.50%"
+      }
+    ]
+  },
+  "commercial_batches": [
+    {
+      "batch_id": "AML-2026-01",
+      "dossier_reported": {
+        "batch_yield_kg": 177.2,
+        "batch_yield_pct": 88.6,
+        "assay_pct": 99.8,
+        "impurity_a_pct": 0.02,
+        "impurity_f_pct": 0.04,
+        "residual_ipa_ppm": 520.0,
+        "polymorphic_form": "Form I (Anhydrous)",
+        "psd_d50_um": 32.4
+      },
+      "ebmr_process_data": {
+        "step1_reflux_temp_c": 75.2,
+        "step1_agitation_rpm": 122.0,
+        "step2_amine_addition_temp_c": 40.1,
+        "step2_deprotection_time_hr": 6.0,
+        "step3_acid_addition_min": 120.0
+      },
+      "coa_results": {
+        "assay_pct": 99.6,
+        "impurity_a_pct": 0.04,
+        "impurity_f_pct": 0.05,
+        "residual_ipa_ppm": 380.0,
+        "water_content_pct": 0.18
+      },
+      "nitrosamine_levels": {
+        "n_nitrosopiperidine_ppm": 0.02,
+        "n_nitroso_amlodipine_ppm": 0.02,
+        "benzenesulfonate_esters_ppm": 0.1
+      },
+      "process_validation_yields": {
+        "step1_cyclization_pct": 88.5,
+        "step2_deprotection_pct": 91.8,
+        "step3_salt_formation_pct": 93.8,
+        "overall_process_yield_pct": 76.2
+      }
+    },
+    {
+      "batch_id": "AML-2026-02",
+      "dossier_reported": {
+        "batch_yield_kg": 176.8,
+        "batch_yield_pct": 88.4,
+        "assay_pct": 99.6,
+        "impurity_a_pct": 0.03,
+        "impurity_f_pct": 0.05,
+        "residual_ipa_ppm": 480.0,
+        "polymorphic_form": "Form I (Anhydrous)",
+        "psd_d50_um": 31.8
+      },
+      "ebmr_process_data": {
+        "step1_reflux_temp_c": 76.0,
+        "step1_agitation_rpm": 118.0,
+        "step2_amine_addition_temp_c": 39.8,
+        "step2_deprotection_time_hr": 8.5,
+        "step3_acid_addition_min": 110.0
+      },
+      "coa_results": {
+        "assay_pct": 97.1,
+        "impurity_a_pct": 0.28,
+        "impurity_f_pct": 0.06,
+        "residual_ipa_ppm": 410.0,
+        "water_content_pct": 0.22
+      },
+      "nitrosamine_levels": {
+        "n_nitrosopiperidine_ppm": 0.02,
+        "n_nitroso_amlodipine_ppm": 0.02,
+        "benzenesulfonate_esters_ppm": 0.1
+      },
+      "process_validation_yields": {
+        "step1_cyclization_pct": 88.2,
+        "step2_deprotection_pct": 74.1,
+        "step3_salt_formation_pct": 90.2,
+        "overall_process_yield_pct": 58.9
+      }
+    },
+    {
+      "batch_id": "AML-2026-03",
+      "dossier_reported": {
+        "batch_yield_kg": 177.6,
+        "batch_yield_pct": 88.8,
+        "assay_pct": 99.9,
+        "impurity_a_pct": 0.02,
+        "impurity_f_pct": 0.04,
+        "residual_ipa_ppm": 610.0,
+        "polymorphic_form": "Form I (Anhydrous)",
+        "psd_d50_um": 33.1
+      },
+      "ebmr_process_data": {
+        "step1_reflux_temp_c": 74.8,
+        "step1_agitation_rpm": 120.0,
+        "step2_amine_addition_temp_c": 41.2,
+        "step2_deprotection_time_hr": 5.8,
+        "step3_acid_addition_min": 125.0
+      },
+      "coa_results": {
+        "assay_pct": 99.5,
+        "impurity_a_pct": 0.05,
+        "impurity_f_pct": 0.04,
+        "residual_ipa_ppm": 420.0,
+        "water_content_pct": 0.19
+      },
+      "nitrosamine_levels": {
+        "n_nitrosopiperidine_ppm": 0.01,
+        "n_nitroso_amlodipine_ppm": 1.25,
+        "benzenesulfonate_esters_ppm": 0.1
+      },
+      "process_validation_yields": {
+        "step1_cyclization_pct": 88.8,
+        "step2_deprotection_pct": 91.5,
+        "step3_salt_formation_pct": 94.0,
+        "overall_process_yield_pct": 76.4
+      }
+    }
+  ],
+  "qa_compliance": {
+    "review_summary": [
+      {
+        "review_area": "eBMR Review",
+        "batches_assessed": "AML-2026-01, 02, 03",
+        "qa_compliance_status": "COMPLIANT",
+        "action_required": "Sign-off for Release"
+      },
+      {
+        "review_area": "OOS / OOT Investigations",
+        "batches_assessed": "AML-2026-02",
+        "qa_compliance_status": "OPEN INVESTIGATION",
+        "action_required": "Hold Batch Release"
+      },
+      {
+        "review_area": "Nitrosamine Testing",
+        "batches_assessed": "AML-2026-03",
+        "qa_compliance_status": "FLAGGED",
+        "action_required": "Follow-up CAPA"
+      },
+      {
+        "review_area": "Process Validation",
+        "batches_assessed": "AML-2026-01 to 03",
+        "qa_compliance_status": "UNDER REVIEW",
+        "action_required": "Re-evaluation Required"
+      }
+    ],
+    "deviations": [
+      {
+        "record_id": "DEV-2026-011",
+        "affected_batch": "AML-2026-02",
+        "event_description": "Step 2 Extended Deprotection Time",
+        "severity": "MAJOR",
+        "status": "OPEN"
+      },
+      {
+        "record_id": "OOS-2026-004",
+        "affected_batch": "AML-2026-02",
+        "event_description": "Assay & Impurity A Deviation",
+        "severity": "CRITICAL",
+        "status": "UNDER INVESTIGATION"
+      },
+      {
+        "record_id": "OOT-2026-002",
+        "affected_batch": "AML-2026-03",
+        "event_description": "NDSRI Elevation Trend",
+        "severity": "MAJOR",
+        "status": "PENDING CAPA"
+      },
+      {
+        "record_id": "VAL-2026-001",
+        "affected_batch": "AML-2026-02",
+        "event_description": "Stage Yield Variance",
+        "severity": "CRITICAL",
+        "status": "OPEN"
+      }
+    ],
+    "disposition_signoff": [
+      {
+        "qa_function": "QA Compliance Lead",
+        "reviewer_name": "S. Jenkins",
+        "disposition_decision": "REJECT Batch AML-2026-02",
+        "date_signature": "28-Jan-2026 [SIGNED]"
+      },
+      {
+        "qa_function": "VP Quality Operations",
+        "reviewer_name": "Dr. M. Vance",
+        "disposition_decision": "HOLD Regulatory Filing",
+        "date_signature": "28-Jan-2026 [SIGNED]"
+      }
+    ]
+  }
+}

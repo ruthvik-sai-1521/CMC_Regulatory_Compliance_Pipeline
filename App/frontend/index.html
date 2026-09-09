@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CMC Regulatory Compliance Pipeline | Amlodipine Besylate API</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚗️</text></svg>">
+<link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">Rx</div>
+        <div class="brand-text">
+          <h1>CMC Regulatory Compliance Pipeline</h1>
+          <p>Unstructured Dossier Parsing &amp; Automated GxP Rule Engine — Amlodipine Besylate API</p>
+        </div>
+      </div>
+      <div class="topbar-meta">
+        <span class="pill pill-neutral" id="apiStatusPill">● checking API…</span>
+        <span class="pill pill-outline">ICH CTD Module 3.2.S</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== INTRO / STEPS ===================== -->
+  <section class="section intro-strip">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Ingest Source PDFs</h3>
+          <p>FDA/EMA Module 3.2.S dossier + Site QA compliance package (eBMR, CoA, deviations).</p>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Structured Extraction</h3>
+          <p>Nested CMC data mapped into <code>regulatoryFiling.json</code> — nomenclature, KSMs, CoA, yields, nitrosamines, QA logs.</p>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>GxP Rule Audit</h3>
+          <p><code>rules.yaml</code> is evaluated batch-by-batch to produce a scored <code>compliance_report.json</code> and filing verdict.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INPUT PANEL ===================== -->
+  <section class="section">
+    <div class="card input-card">
+      <div class="input-card-header">
+        <h2>Run the Pipeline</h2>
+        <p>Use the bundled reference package for an instant demo, or upload your own two source PDFs.</p>
+      </div>
+
+      <div class="input-grid">
+        <div class="dropzone" id="dossierDrop">
+          <input type="file" id="dossierFile" accept="application/pdf" hidden />
+          <div class="dz-icon">📄</div>
+          <div class="dz-label">Regulatory Dossier PDF</div>
+          <div class="dz-sub" id="dossierFileName">ICH CTD Module 3.2.S — click or drop to replace sample</div>
+        </div>
+        <div class="dropzone" id="qaDrop">
+          <input type="file" id="qaFile" accept="application/pdf" hidden />
+          <div class="dz-icon">🧪</div>
+          <div class="dz-label">QA Compliance Package PDF</div>
+          <div class="dz-sub" id="qaFileName">Site QA / eBMR / Batch Audit — click or drop to replace sample</div>
+        </div>
+      </div>
+
+      <div class="input-actions">
+        <button class="btn btn-primary" id="runSampleBtn">▶ Run With Bundled Sample Package</button>
+        <button class="btn btn-secondary" id="runUploadBtn">⬆ Run Pipeline On Uploaded Files</button>
+        <span class="hint" id="runHint"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LOADING ===================== -->
+  <section class="section" id="loadingSection" hidden>
+    <div class="card loading-card">
+      <div class="spinner"></div>
+      <div>
+        <h3 id="loadingTitle">Parsing source documents…</h3>
+        <p id="loadingSub">Extracting nested CMC tables and cross-referencing dossier vs. QA records.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ERROR ===================== -->
+  <section class="section" id="errorSection" hidden>
+    <div class="card error-card">
+      <strong>Pipeline error</strong>
+      <p id="errorText"></p>
+    </div>
+  </section>
+
+  <!-- ===================== RESULTS ===================== -->
+  <section class="section" id="resultsSection" hidden>
+
+    <!-- Verdict banner -->
+    <div class="verdict-banner" id="verdictBanner">
+      <div class="verdict-left">
+        <div class="verdict-label">FINAL DOSSIER VERDICT</div>
+        <div class="verdict-value" id="verdictValue">—</div>
+        <div class="verdict-reason" id="verdictReason"></div>
+      </div>
+      <div class="verdict-right">
+        <div class="download-row">
+          <button class="btn btn-ghost" id="downloadFilingBtn">⬇ regulatoryFiling.json</button>
+          <button class="btn btn-ghost" id="downloadReportBtn">⬇ compliance_report.json</button>
+        </div>
+        <div class="report-id" id="reportIdLine"></div>
+      </div>
+    </div>
+
+    <!-- Summary stat cards -->
+    <div class="stat-grid">
+      <div class="card stat-card">
+        <div class="stat-title">Data Completeness</div>
+        <div class="stat-value" id="statCompleteness">—</div>
+        <div class="stat-sub" id="statCompletenessSub"></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-title">Rules Evaluated</div>
+        <div class="stat-value" id="statRulesEvaluated">—</div>
+        <div class="stat-sub">across 3 commercial batches</div>
+      </div>
+      <div class="card stat-card severity-card">
+        <div class="stat-title">Violations by Severity</div>
+        <div class="severity-row">
+          <span class="badge badge-critical" id="sevCritical">CRITICAL 0</span>
+          <span class="badge badge-major" id="sevMajor">MAJOR 0</span>
+          <span class="badge badge-minor" id="sevMinor">MINOR 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch verdict cards -->
+    <div class="card">
+      <h2 class="section-title">Batch Disposition Overview</h2>
+      <div class="batch-grid" id="batchGrid"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="card tabs-card">
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" data-tab="violations">Rule Violations</button>
+        <button class="tab-btn" data-tab="rules">Loaded GxP Rules</button>
+        <button class="tab-btn" data-tab="filing">Structured Filing (JSON)</button>
+        <button class="tab-btn" data-tab="report">Compliance Report (JSON)</button>
+      </div>
+
+      <div class="tab-panel" id="panel-violations">
+        <div class="table-wrap">
+          <table id="violationsTable">
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Rule ID</th>
+                <th>Category</th>
+                <th>Batch</th>
+                <th>Parameter</th>
+                <th>Actual</th>
+                <th>Expected</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody id="violationsBody"></tbody>
+          </table>
+        </div>
+        <p class="empty-note" id="noViolationsNote" hidden>✅ No rule violations identified across any commercial batch.</p>
+      </div>
+
+      <div class="tab-panel" id="panel-rules" hidden>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rule ID</th><th>Category</th><th>Severity</th><th>Description</th></tr></thead>
+            <tbody id="rulesBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-filing" hidden>
+        <pre class="json-view" id="filingJson"></pre>
+      </div>
+
+      <div class="tab-panel" id="panel-report" hidden>
+        <pre class="json-view" id="reportJson"></pre>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <p>AI Engineer Take-Home · CMC Regulatory Compliance Pipeline · FastAPI + pdfplumber + PyYAML · Deployable on Railway</p>
+  </footer>
+
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
