@@ -21,10 +21,16 @@ SAMPLE_COMPLIANCE_REPORT = SAMPLE_DATA_DIR / "compliance_report.json"
 SAMPLE_DOSSIER_PDF = SAMPLE_INPUTS_DIR / "Amlodipine_Besylate_14Page_FDA_Dossier.pdf"
 SAMPLE_QA_PDF = SAMPLE_INPUTS_DIR / "Amlodipine_Besylate_QA_Compliance_Package.pdf"
 
-# Runtime workspace for uploaded files / generated artifacts (ephemeral on Railway,
-# which is fine -- every request is self-contained and returns its own JSON payloads).
+# Runtime workspace for uploaded files and generated artifacts. Set RUNTIME_DIR or
+# ARTIFACTS_DIR to a mounted persistent volume when artifact retention is required.
 RUNTIME_DIR = Path(os.getenv("RUNTIME_DIR", "/tmp/cmc_pipeline"))
 RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+
+# Live pipeline artifacts. Override this for a persistent volume in deployment.
+ARTIFACTS_DIR = Path(os.getenv("ARTIFACTS_DIR", RUNTIME_DIR / "artifacts"))
+ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+POPULATED_JSON_PATH = ARTIFACTS_DIR / "regulatoryFiling.json"
+COMPLIANCE_REPORT_PATH = ARTIFACTS_DIR / "compliance_report.json"
 
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 

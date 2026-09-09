@@ -27,7 +27,7 @@ App/
 │   │   │   └── utils.py            Shared table/number-parsing helpers
 │   │   └── rules/
 │   │       └── engine.py           Loads rules.yaml, evaluates it, builds the audit report
-│   ├── regulatoryFiling.schema.json   Blank target JSON schema (Part 1 deliverable template)
+│   ├── regulatoryFiling.schema.json   JSON Schema used to validate generated filings
 │   ├── rules.yaml                     GxP rule configuration (Part 2 deliverable template)
 │   ├── sample_data/
 │   │   ├── regulatoryFiling.json      Pre-generated Part 1 output (reference run)
@@ -166,8 +166,10 @@ account-specific actions I can't perform for you:
    runs the same `uvicorn` start command.
 
 **Note on uploads:** uploaded PDFs are processed in a temporary directory (`/tmp/cmc_pipeline`)
-and deleted immediately after each request — there is no persistent storage requirement, so the
-service works statelessly on Railway's ephemeral filesystem with zero extra configuration.
+and deleted immediately after each request. Each successful run writes
+`regulatoryFiling.json` and `compliance_report.json` to the artifact directory. By default this
+is `/tmp/cmc_pipeline/artifacts`; set `ARTIFACTS_DIR` to a mounted persistent volume when the
+files must survive container restarts or Railway redeployments.
 
 ---
 
@@ -176,13 +178,17 @@ service works statelessly on Railway's ephemeral filesystem with zero extra conf
 | Method | Path | Description |
 |---|---|---|
 | GET | `/api/health` | Liveness/readiness check |
-| GET | `/api/schema` | The blank target `regulatoryFiling.schema.json` |
+| GET | `/api/schema` | The JSON Schema used to validate generated filings |
 | GET | `/api/rules` | The active `rules.yaml`, as JSON |
 | GET | `/api/sample/run` | Runs the **full live pipeline** on the bundled sample PDFs |
 | GET | `/api/sample/filing` | Pre-generated sample `regulatoryFiling.json` |
 | GET | `/api/sample/report` | Pre-generated sample `compliance_report.json` |
 | POST | `/api/pipeline/run` | Multipart upload (`dossier_pdf`, `qa_pdf`) → full Part 1 + Part 2 result |
 | POST | `/api/audit` | JSON body = a populated filing → runs Part 2 only |
+
+Every full pipeline run validates the mapped filing against `regulatoryFiling.schema.json`
+before running the YAML rules, then writes `regulatoryFiling.json` and
+`compliance_report.json` to `ARTIFACTS_DIR`.
 
 ---
 

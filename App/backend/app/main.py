@@ -9,6 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from jsonschema import ValidationError, validate
 
 from . import config
 from .parser import build_regulatory_filing, parse_dossier, parse_qa_package
@@ -49,7 +50,7 @@ def health():
 
 @app.get("/api/schema")
 def get_schema():
-    """Returns the blank target JSON schema template."""
+    """Returns the JSON Schema used to validate generated filings."""
     if not config.SCHEMA_TEMPLATE_PATH.exists():
         raise HTTPException(404, "Schema template not found on server.")
     return json.loads(config.SCHEMA_TEMPLATE_PATH.read_text())
@@ -128,8 +129,14 @@ async def audit_only(filing: dict):
     Part 2 as a standalone endpoint: accepts an already-populated
     regulatoryFiling.json body and runs the GxP rule engine against it.
     """
+    try:
+        _validate_filing(filing)
+    except ValidationError as exc:
+        raise HTTPException(422, f"Filing failed schema validation: {exc.message}") from exc
+    _write_artifact(config.POPULATED_JSON_PATH, filing)
     rules_config = load_rules_yaml(str(config.RULES_YAML_PATH))
     report = run_compliance_audit(filing, rules_config)
+    _write_artifact(config.COMPLIANCE_REPORT_PATH, report)
     return report
 
 
@@ -138,13 +145,37 @@ def _run_pipeline(dossier_path: str, qa_path: str):
         dossier_data = parse_dossier(dossier_path)
         qa_data = parse_qa_package(qa_path)
         filing = build_regulatory_filing(dossier_data, qa_data)
+        _validate_filing(filing)
     except Exception as exc:  # noqa: BLE001
+        if isinstance(exc, ValidationError):
+            raise HTTPException(422, f"Generated filing failed schema validation: {exc.message}") from exc
         raise HTTPException(422, f"Failed to parse source PDF(s): {exc}") from exc
 
     rules_config = load_rules_yaml(str(config.RULES_YAML_PATH))
     report = run_compliance_audit(filing, rules_config)
+    _write_artifact(config.POPULATED_JSON_PATH, filing)
+    _write_artifact(config.COMPLIANCE_REPORT_PATH, report)
 
-    return {"regulatoryFiling": filing, "compliance_report": report}
+    return {
+        "regulatoryFiling": filing,
+        "compliance_report": report,
+        "artifacts": {
+            "regulatoryFiling": str(config.POPULATED_JSON_PATH),
+            "compliance_report": str(config.COMPLIANCE_REPORT_PATH),
+        },
+    }
+
+
+def _validate_filing(filing: dict):
+    with open(config.SCHEMA_TEMPLATE_PATH, "r", encoding="utf-8") as schema_file:
+        schema = json.load(schema_file)
+    validate(instance=filing, schema=schema)
+
+
+def _write_artifact(path: Path, payload: dict):
+    temporary_path = path.with_suffix(f"{path.suffix}.{uuid.uuid4().hex}.tmp")
+    temporary_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    temporary_path.replace(path)
 
 
 def _save_upload(upload: UploadFile, dest_path: str):

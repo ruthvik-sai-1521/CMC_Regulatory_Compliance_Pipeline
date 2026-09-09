@@ -20,7 +20,7 @@ The bundled reference run is reproducible and produces:
 - Severity totals: `5 CRITICAL`, `6 MAJOR`, `0 MINOR`
 - Final verdict: `REJECTED_HOLD_SUBMISSION`
 
-The result is appropriate for a technical demonstration and pre-filing review aid. It is not yet a production-grade validated GxP system because it does not currently validate the generated object against the JSON Schema, persist live output files, provide audit-trail logging, or use a document/OCR strategy for arbitrary PDF layouts.
+The result is appropriate for a technical demonstration and pre-filing review aid. It is not yet a production-grade validated GxP system because it does not yet provide immutable audit-trail logging or use a document/OCR strategy for arbitrary PDF layouts. The runtime now validates the generated filing against the JSON Schema and writes both named JSON artifacts to a configurable artifact directory.
 
 ## 2. Requirements Interpreted
 
@@ -189,13 +189,13 @@ The reference failure is centered on `AML-2026-02`:
 | Ingest both PDFs | Satisfied for supplied layout | `parse_dossier()` and `parse_qa_package()` use `pdfplumber`; bundled live run succeeds. |
 | Extract CMC and QA data | Satisfied for supplied layout | Parsers cover the requested metadata, CMC, batch, CoA, eBMR, deviation, and disposition areas. |
 | Populate target filing structure | Mostly satisfied | `schema_mapper.py` constructs the target shape and a populated reference JSON exists. |
-| Write populated `regulatoryFiling.json` during a run | Not satisfied | Runtime returns an in-memory object; it does not write a new JSON file. The checked-in sample is a pre-generated artifact. |
-| Validate against JSON Schema | Not satisfied | The schema is exposed and documented, but no `jsonschema` dependency or validation call is present. |
+| Write populated `regulatoryFiling.json` during a run | Satisfied | Full pipeline and standalone audit runs write the artifact to `ARTIFACTS_DIR` using an atomic replacement. |
+| Validate against JSON Schema | Satisfied | `jsonschema` validates the mapped filing before the compliance rules execute. |
 | Load and execute YAML rules | Satisfied | `load_rules_yaml()` and the rule engine execute the configured rule groups. |
 | Completeness PASS/FAIL | Satisfied | Mandatory paths are checked for non-null and non-empty values. |
 | Detailed violations | Satisfied | Reports include rule ID, batch, parameter, actual, expected, severity, category, and description. |
 | Final approved/rejected verdict | Satisfied | The two requested verdict strings are produced. |
-| Persist `compliance_report.json` during a run | Not satisfied | Runtime returns JSON; it does not persist a newly generated report file. |
+| Persist `compliance_report.json` during a run | Satisfied | Full pipeline and standalone audit runs write the generated report to `ARTIFACTS_DIR`. |
 | Founder-level explanation | Added | This file documents the architecture, data flow, logic, result, status, and gaps. |
 
 ## 9. How to Explain It to a Founder
@@ -204,12 +204,12 @@ The reference failure is centered on `AML-2026-02`:
 
 “For the supplied Amlodipine package, the system reaches the correct conservative outcome: hold the filing. It identifies that Batch AML-2026-02 has an out-of-specification assay, elevated Impurity A, poor process yields, an extended deprotection time, unresolved deviations, a dossier/CoA assay mismatch, and explicit reject/hold decisions. The other two batches pass the configured batch rules, but the overall submission remains rejected because the dossier contains a material failed batch and unresolved critical/major QA findings.”
 
-“The current version is a working demonstrator and integration foundation. Before production use in a regulated environment, we need schema validation, stronger document extraction and confidence handling, immutable audit logs, authenticated access, rule/version traceability, automated tests, and formal validation of the intended use.”
+“The current version is a working demonstrator and integration foundation. Before production use in a regulated environment, we need stronger document extraction and confidence handling, immutable audit logs, authenticated access, rule/version traceability, automated tests, and formal validation of the intended use.”
 
 ## 10. Technical Gaps and Recommended Next Steps
 
-1. Add `jsonschema` validation after mapping and before auditing. Return a clear validation error when required types, enums, or nested properties do not conform.
-2. Add an explicit artifact writer so a pipeline run can optionally save `regulatoryFiling.json` and `compliance_report.json` with a run ID and source-document hashes.
+1. Tighten the structural JSON Schema with field-level types, enums, nested required properties, and units where appropriate.
+2. Add run IDs and source-document hashes to persisted artifacts and retain them on a persistent deployment volume.
 3. Add parser tests using the supplied PDFs and fixture tables. Include missing-table, reordered-column, malformed-number, and scanned-PDF cases.
 4. Add a parser confidence/completeness model. Distinguish “not found,” “not applicable,” and “found but unparsable” instead of silently producing `None`.
 5. Replace hard-coded batch IDs in QA parser defaults with IDs discovered from the table headers, while retaining strict validation of expected batch identity.
@@ -251,4 +251,4 @@ The expected final output for the bundled sample is `REJECTED_HOLD_SUBMISSION`.
 
 The project satisfies the core proof-of-concept objective and demonstrates the complete intended pipeline on the supplied PDFs. The parser, mapper, rule engine, API, dashboard, Docker packaging, sample filing, and sample audit report are all present and the live sample run is reproducible.
 
-The requirements that are only partially met are file persistence and strict schema conformance: the runtime creates Python dictionaries and returns them as JSON, but it does not write or validate the named JSON artifacts during each execution. Those are straightforward next implementation steps. The larger production risks are extraction robustness, traceability, security, and formal GxP validation rather than the basic pipeline architecture.
+The core requirements are now met, including runtime artifact persistence and schema validation. The remaining production risks are extraction robustness, traceability, security, and formal GxP validation rather than the basic pipeline architecture. The default artifact directory is ephemeral in containers; deployments that require retention should set `ARTIFACTS_DIR` to persistent storage.

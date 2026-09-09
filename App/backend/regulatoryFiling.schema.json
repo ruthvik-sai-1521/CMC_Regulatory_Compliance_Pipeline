@@ -1,94 +1,35 @@
 {
-  "document_metadata": {
-    "document_id": null,
-    "drug_substance": null,
-    "dmf_number": null,
-    "submitting_entity": null,
-    "target_authorities": [],
-    "submission_purpose": null,
-    "ctd_module_scope": null,
-    "effective_date": null,
-    "qa_protocol_id": null,
-    "manufacturing_site": null,
-    "plant_location": null,
-    "target_markets": []
-  },
-  "drug_substance_profile": {
-    "iupac_name": null,
-    "cas_number_besylate": null,
-    "cas_number_free_base": null,
-    "molecular_formula": null,
-    "molecular_weight": null,
-    "stereochemistry": null,
-    "melting_point_range_c": null,
-    "pka": null,
-    "log_p": null,
-    "solubility_matrix": []
-  },
-  "ksm_and_raw_materials": [],
-  "process_controls": {
-    "critical_process_parameters": [],
-    "hold_time_limits": []
-  },
-  "impurity_profile": {
-    "organic_impurities": [],
-    "residual_solvents": []
-  },
-  "nitrosamine_risk_assessment": {
-    "risk_factors": [],
-    "calculated_ai_ng_per_day": null,
-    "confirmatory_testing_result": null
-  },
-  "elemental_impurities": [],
-  "release_specifications": [],
-  "analytical_method_validation": [],
-  "stability_data": {
-    "forced_degradation": [],
-    "long_term_stability": []
-  },
-  "commercial_batches": [
-    {
-      "batch_id": null,
-      "dossier_reported": {
-        "batch_yield_kg": null,
-        "batch_yield_pct": null,
-        "assay_pct": null,
-        "impurity_a_pct": null,
-        "impurity_f_pct": null,
-        "residual_ipa_ppm": null,
-        "polymorphic_form": null,
-        "psd_d50_um": null
-      },
-      "ebmr_process_data": {
-        "step1_reflux_temp_c": null,
-        "step1_agitation_rpm": null,
-        "step2_amine_addition_temp_c": null,
-        "step2_deprotection_time_hr": null,
-        "step3_acid_addition_min": null
-      },
-      "coa_results": {
-        "assay_pct": null,
-        "impurity_a_pct": null,
-        "impurity_f_pct": null,
-        "residual_ipa_ppm": null,
-        "water_content_pct": null
-      },
-      "nitrosamine_levels": {
-        "n_nitrosopiperidine_ppm": null,
-        "n_nitroso_amlodipine_ppm": null,
-        "benzenesulfonate_esters_ppm": null
-      },
-      "process_validation_yields": {
-        "step1_cyclization_pct": null,
-        "step2_deprotection_pct": null,
-        "step3_salt_formation_pct": null,
-        "overall_process_yield_pct": null
-      }
-    }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/regulatoryFiling.schema.json",
+  "title": "CMC Regulatory Filing",
+  "type": "object",
+  "required": [
+    "document_metadata", "drug_substance_profile", "ksm_and_raw_materials",
+    "process_controls", "impurity_profile", "nitrosamine_risk_assessment",
+    "elemental_impurities", "release_specifications",
+    "analytical_method_validation", "stability_data", "commercial_batches",
+    "qa_compliance"
   ],
-  "qa_compliance": {
-    "review_summary": [],
-    "deviations": [],
-    "disposition_signoff": []
+  "properties": {
+    "document_metadata": { "$ref": "#/$defs/object" },
+    "drug_substance_profile": { "$ref": "#/$defs/object" },
+    "ksm_and_raw_materials": { "$ref": "#/$defs/array" },
+    "process_controls": { "$ref": "#/$defs/object" },
+    "impurity_profile": { "$ref": "#/$defs/object" },
+    "nitrosamine_risk_assessment": { "$ref": "#/$defs/object" },
+    "elemental_impurities": { "$ref": "#/$defs/array" },
+    "release_specifications": { "$ref": "#/$defs/array" },
+    "analytical_method_validation": { "$ref": "#/$defs/array" },
+    "stability_data": { "$ref": "#/$defs/object" },
+    "commercial_batches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/object" },
+      "minItems": 1
+    },
+    "qa_compliance": { "$ref": "#/$defs/object" }
+  },
+  "$defs": {
+    "object": { "type": "object" },
+    "array": { "type": "array" }
   }
 }
